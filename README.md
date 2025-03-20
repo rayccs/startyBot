@@ -1,0 +1,2 @@
+# startyBot
+Version a usar
