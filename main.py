@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 from agent import Starty  # Importación corregida
 import os  # Importar os para acceder a las variables de entorno
+from flask_cors import CORS  # Importa CORS
 
 app = Flask(__name__)
+CORS(app) 
 starty = Starty()
 
 # Mensaje de bienvenida de Starty
