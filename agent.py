@@ -19,6 +19,7 @@ class Starty:
         self.question_count = 0   # Contador de preguntas realizadas
         self.waiting_for_final_confirmation = False # Flag para esperar la respuesta a la pregunta final
         self.additional_questions_mode = False # Flag para preguntas adicionales
+        self.first_question_asked = False # Flag para controlar la primera pregunta
 
         # Registrar la función de limpieza al salir
         atexit.register(self.cleanup)
@@ -37,8 +38,11 @@ class Starty:
         if self.waiting_for_final_confirmation:
             return None
             
+        if not self.first_question_asked:
+            return "¡Hola! Soy Starty, tu asesor inteligente y autónomo para la creación de landing pages. Estoy aquí para entender tus necesidades a través de preguntas, análisis y repreguntas. ¡Empecemos! ¿Cuál es el objetivo principal que deseas lograr con esta landing page (ej: generar leads, ventas, descargas, etc.) y qué métricas usarás para medir su éxito?"
+            
         if self.additional_questions_mode:
-            prompt = f"""Eres un asistente virtual especializado y experto en la creación de landing pages, tu objetivo es ayudar al cliente con el que interactuas para recopilar toda la informacion necesaria que permita en definitiva crear una landing page completa y funcional . Basándote en la siguiente información proporcionada por el usuario:
+            prompt = f"""Eres un asistente virtual especializado y experto en la creación de landing pages, tu objetivo es ayudar al cliente con el que interactuas para recopilar toda la informacion necesaria que permita en definitiva crear una landing page completa y funcional. Basándote en la siguiente información proporcionada por el usuario:
             {json.dumps(self.project_state, indent=2)}
             y las preguntas que ya hemos hecho: {list(self.asked_questions)}, formula **una única pregunta concisa** que sea la siguiente más lógica e importante para hacerle al usuario para recopilar la información necesaria para crear una landing page efectiva. Responde solo con la pregunta.
             """
@@ -96,6 +100,11 @@ class Starty:
                 return "Por favor, responde 'sí' o 'no' si tienes alguna otra duda antes de generar el informe final."
 
         if not self.current_question:
+            if not self.first_question_asked:
+                self.current_question = "¡Hola! Soy Starty, tu asesor inteligente y autónomo para la creación de landing pages. Estoy aquí para entender tus necesidades a través de preguntas, análisis y repreguntas. ¡Empecemos! ¿Cuál es el objetivo principal que deseas lograr con esta landing page (ej: generar leads, ventas, descargas, etc.) y qué métricas usarás para medir su éxito?"
+                self.first_question_asked = True
+                return self.current_question
+                
             if self.question_count < self.question_limit:
                 next_question = self._get_next_question()
                 if next_question:
@@ -111,6 +120,13 @@ class Starty:
         self.project_state[self.current_question] = user_input
         self.asked_questions.add(self.current_question)
         self.current_question = None
+
+        if not self.first_question_asked:
+            self.first_question_asked = True
+            next_question = self._get_next_question()
+            if next_question:
+                self.current_question = next_question
+                return next_question
 
         if self.question_count < self.question_limit:
             self.question_count += 1
@@ -144,3 +160,4 @@ class Starty:
         self.question_count = 0
         self.waiting_for_final_confirmation = False
         self.additional_questions_mode = False
+        self.first_question_asked = False
