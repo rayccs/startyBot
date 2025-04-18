@@ -15,7 +15,7 @@ class Starty:
         self.asked_questions = set()
         self.current_question = None
         self.conversation_complete = False
-        self.question_limit = 3  # Límite fijo de 3 preguntas iniciales
+        self.question_limit = 12  # Límite fijo de 3 preguntas iniciales
         self.question_count = 0   # Contador de preguntas realizadas
         self.waiting_for_final_confirmation = False # Flag para esperar la respuesta a la pregunta final
         self.additional_questions_mode = False # Flag para preguntas adicionales
@@ -39,7 +39,7 @@ class Starty:
             return None
             
         if not self.first_question_asked:
-            return "¡Hola! Soy Starty, tu asesor inteligente y autónomo para la creación de landing pages. Estoy aquí para entender tus necesidades a través de preguntas, análisis y repreguntas. ¡Empecemos! ¿Cuál es el objetivo principal que deseas lograr con esta landing page (ej: generar leads, ventas, descargas, etc.) y qué métricas usarás para medir su éxito?"
+            return "¿Cuál es el objetivo principal que deseas lograr con esta landing page (ej: generar leads, ventas, descargas, etc.)?"
             
         if self.additional_questions_mode:
             prompt = f"""Eres un asistente virtual especializado y experto en la creación de landing pages, tu objetivo es ayudar al cliente con el que interactuas para recopilar toda la informacion necesaria que permita en definitiva crear una landing page completa y funcional. Basándote en la siguiente información proporcionada por el usuario:
@@ -101,7 +101,7 @@ class Starty:
 
         if not self.current_question:
             if not self.first_question_asked:
-                self.current_question = "¡Hola! Soy Starty, tu asesor inteligente y autónomo para la creación de landing pages. Estoy aquí para entender tus necesidades a través de preguntas, análisis y repreguntas. ¡Empecemos! ¿Cuál es el objetivo principal que deseas lograr con esta landing page (ej: generar leads, ventas, descargas, etc.) y qué métricas usarás para medir su éxito?"
+                self.current_question = "¿Cuál es el objetivo principal que deseas lograr con esta landing page (ej: generar leads, ventas, descargas, etc.)?"
                 self.first_question_asked = True
                 return self.current_question
                 
@@ -145,10 +145,12 @@ class Starty:
         return "Ha ocurrido un error al procesar tu respuesta."
 
     def generate_final_report(self):
-        report = "Informe Final del Proyecto:\n\n"
+        report = "Resumen de tus respuestas:\n\n"
         for clave, valor in self.project_state.items():
             report += f"- {clave}: {valor}\n"
-        report += "\nEste informe resume tus respuestas. ¡Gracias por tu tiempo! El servicio se reiniciará para la siguiente consulta."
+        # report += "\nEste informe resume tus respuestas. ¡Gracias por tu tiempo! El servicio se reiniciará para la siguiente consulta."
+        report += "\n¡Gracias por tu tiempo! ahora vamos a generar tu nueva Landing Page."
+
         return report
 
     def reset(self):
