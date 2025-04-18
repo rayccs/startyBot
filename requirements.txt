@@ -3,3 +3,4 @@ flask-cors>=3.0.0
 google-generativeai
 requests>=2.25.0
 python-dotenv>=0.19.0
+gunicorn==21.2.0
